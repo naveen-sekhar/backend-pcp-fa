@@ -12,7 +12,10 @@ const PORT = process.env.PORT || 5000;
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 const issueRoutes = require('./routes/issueRoutes');
+const commentRoutes = require('./routes/commentRoutes');
 const syncRoutes = require('./routes/syncRoutes');
 const statsRoutes = require('./routes/statsRoutes');
 
@@ -23,7 +26,10 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://naveen:naveensekhar@pcp
 
 // Mount routes
 app.use('/auth', authRoutes);
+app.use('/users', userRoutes);
+app.use('/projects', projectRoutes);
 app.use('/issues', issueRoutes);
+app.use('/comments', commentRoutes);
 app.use('/sync', syncRoutes);
 app.use('/', statsRoutes);
 

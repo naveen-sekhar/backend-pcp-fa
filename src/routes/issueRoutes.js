@@ -1,4 +1,4 @@
-// Express router: GET/POST/PUT/DELETE /issues, GET /issues/search
+// Express router: GET/POST/PATCH/DELETE /issues, GET /issues/search
 // RBAC: admin/manager can create/assign/change priority; developer can update assigned; tester can report
 const express = require('express');
 const router = express.Router();
@@ -13,11 +13,15 @@ router.get('/search', issueController.search);
 router.get('/', issueController.getAll);
 router.get('/:id', issueController.getById);
 
-// Only admin/manager can create issues and assign them
+// Only admin/manager/tester can create issues
 router.post('/', authorize('admin', 'manager', 'tester'), issueController.create);
 
-// admin/manager can update anything; developer/tester can update specific fields
-router.put('/:id', authorize('admin', 'manager', 'developer', 'tester'), issueController.update);
+// Workflow endpoints (assign, status)
+router.patch('/:id/assign', authorize('admin', 'manager'), issueController.assignIssue);
+router.patch('/:id/status', authorize('admin', 'manager', 'developer', 'tester'), issueController.updateStatus);
+
+// All authenticated roles can PATCH (controller enforces workflow rules per role)
+router.patch('/:id', authorize('admin', 'manager', 'developer', 'tester'), issueController.update);
 
 // Only admin/manager can delete issues
 router.delete('/:id', authorize('admin', 'manager'), issueController.remove);
