@@ -1,10 +1,12 @@
 // CRUD handlers for projects — messages match exam spec exactly
 const Project = require('../models/Project');
 
-// GET /projects — paginated
+// GET /projects — paginated, dynamic message
 async function getAll(req, res) {
   try {
     const filter = {};
+    const hasFilters = !!(req.query.status || req.query.owner);
+
     if (req.query.status) filter.status = req.query.status;
     if (req.query.owner) filter.owner = req.query.owner;
 
@@ -16,9 +18,11 @@ async function getAll(req, res) {
     const totalPages = Math.ceil(total / limit);
     const projects = await Project.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit);
 
+    const message = hasFilters ? 'Projects filtered successfully' : 'Projects fetched successfully';
+
     return res.status(200).json({
       success: true,
-      message: 'Projects fetched successfully',
+      message,
       page,
       limit,
       total,

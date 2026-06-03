@@ -18,6 +18,7 @@ const issueRoutes = require('./routes/issueRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const syncRoutes = require('./routes/syncRoutes');
 const statsRoutes = require('./routes/statsRoutes');
+const analyticsRoutes = require('./routes/analyticsRoutes');
 
 // Connect MongoDB Atlas
 mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://naveen:naveensekhar@pcp-fa.ryugznl.mongodb.net/')
@@ -31,6 +32,7 @@ app.use('/projects', projectRoutes);
 app.use('/issues', issueRoutes);
 app.use('/comments', commentRoutes);
 app.use('/sync', syncRoutes);
+app.use('/analytics', analyticsRoutes);
 app.use('/', statsRoutes);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
